@@ -26,16 +26,88 @@ En esta práctica se trabajará sobre estos cuatro conceptos mediante la herrami
 ## Desarrollo
 
  1. **Cifrar y descifrar un mensaje mediante criptografía simétrica**
- 2. **Crear par de claves**
- 3. **Listar claves pública/privada**
- 4. **Importar/exportar claves publicas y privadas**
- 5. **Importar y exportar de un servidor de claves**
- 6. **Encriptar un documento con clave pública de destinatario**
- 7. **Desencriptar un documento cifrado con nuetra clave publica haciendo uso de clave privada**
- 8. **Firmar un mensaje y verificar la autoria de un mensaje**
- 9. **Mailevelope**
+
+Texto cifrado "asir2"
+```bash
+echo "texto plano" | gpg --symmetric --armour --batch --passphrase asir2
+```
+```bash
+-----BEGIN PGP MESSAGE-----
+
+jA0ECQMCoxc4/JdrBuv/0kEBa4wRz4uAm3W0mfTH7a1PThwogtHdHE8ewKnJEU4H
+b5hUzQABRaR4yxVIUw4nIh8ya6Qm4H12VD0U6oO4SSUBlg==
+=Lp5r
+-----END PGP MESSAGE-----
+```
+ 1. **Crear par de claves**
+```bash
+gpg --full-gen-key
+```
+ 1. **Listar claves pública/privada**
+```bash
+/root/.gnupg/pubring.kbx
+------------------------
+sec   rsa3072 2024-12-02 [SC]
+      252B49B93EA2A2EDB290DD8A33E041D903FC48B1
+uid           [ultimate] Vinicio <vinatasal@alu.edu.gva.es>
+ssb   rsa3072 2024-12-02 [E]
+```
+ 2. **Importar/exportar claves publicas y privadas**
+```bash
+gpg --import public_key.asc
+gpg --import private_key.asc
+
+```
+```bash
+gpg --export --armour vinatasal@alu.edu.gva.es > public_key.asc
+
+gpg --export-secret-key --armour vinatasal@alu.edu.gva.es > secret_key.asc
+
+gpg --export --armour > all_public_keys.asc
+
+gpg --export-secret-keys --armour > all_private_keys.asc
+```
+ 3. **Importar y exportar de un servidor de claves**
+
+Exportar
+```bash
+Gpg --keyserver keyserver.ubuntu.com --send-keys
+```
+Importar
+```bash
+Gpg --keyserver keyserver.ubuntu.com --receive-keys
+```
+ 1. **Encriptar un documento con clave pública de destinatario**
+```bash
+gpg --encrypt --recipient *email_del_destinatario/ID_DE_LA_CLAVE* --armour documento.txt
+
+gpg --encrypt --recipient *email_del_destinatario/ID_DE_LA_CLAVE* --armour  --output documento.txt.asc
+```
+
+ 2. **Desencriptar un documento cifrado con nuetra clave publica haciendo uso de clave privada**
+```bash
+gpg --decrypt encriptao.txt.asc
+
+gpg --decrypt --output desencriptao.txt encriptao.txt.asc
+```
+ 3. **Firmar un mensaje y verificar la autoria de un mensaje**
+```bash
+gpg --clear-sign firmar.txt
+gpg --local-user vinatasal@alu.edu.gva.es --clear-sign firmar.txt
+
+gpg --verify firmar.txt.gpg
+gpg --verify firmar.txt.asc
+```
+ 4.  **Mailvelope**
     1.  Importar clave privada
     2.  Subir clave pública al keyserver de mailevelope
+```
+Vamos a esta página
+
+chrome-extension://kajibbejlbohfaggdiogboambcijhkke/app/app.html#/keyring/import 
+
+y subimos la clave
+```
     3.  Importar claves publicas
     4.  Enviar un mensaje cifrado y descifrar mensaje.
 
